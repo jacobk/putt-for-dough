@@ -41,6 +41,8 @@ export type GameHistory = Array<Game>;
 
 export interface Settings {
   darkMode: boolean;
+  showFeet: boolean;
+  showMetric: boolean;
 }
 
 export interface API {

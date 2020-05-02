@@ -36,6 +36,7 @@ import Settings from "./Settings";
 import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
 import { CssBaseline } from "@material-ui/core";
 import { ConfirmProvider } from "material-ui-confirm";
+import GameDetails from "./GameDetails";
 
 const storage = new Storage();
 
@@ -183,7 +184,7 @@ function App() {
               <Play />
             </Route>
             <Route path="/games/:id">
-              <Game />
+              <GameDetails />
             </Route>
             <Route path="/games">
               <Games />
@@ -199,17 +200,6 @@ function App() {
         </Box>
       </ConfirmProvider>
     </ThemeProvider>
-  );
-}
-
-function Game() {
-  const { id } = useParams();
-  const [game] = useState(storage.getGame(id));
-  return (
-    <div>
-      <h2>Game {id}!</h2>
-      <pre>{JSON.stringify(game, null, 2)}</pre>
-    </div>
   );
 }
 

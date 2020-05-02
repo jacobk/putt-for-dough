@@ -9,8 +9,27 @@ import RoundHeader from "./RoundHeader";
 import Score from "./Score";
 import { useConfirm } from "material-ui-confirm";
 import Storage from "./api";
+import { makeStyles } from "@material-ui/core/styles";
+import Chip from "@material-ui/core/Chip";
+import { positionLabel } from "./helpers";
 
 const storage = new Storage();
+
+const useStyles = makeStyles((theme) => ({
+  gridAxisLabel: {
+    // transform: "rotate(45deg)",
+    // position: "relative",
+    // top: theme.spacing(1),
+    // left: theme.spacing(1),
+    // textAlign: "left",
+  },
+  position: {
+    textAlign: "center",
+    paddingLeft: theme.spacing(1),
+    paddingRight: theme.spacing(1),
+    color: theme.palette.text.hint,
+  },
+}));
 
 export default function Play() {
   const history = useHistory();
@@ -18,6 +37,7 @@ export default function Play() {
   const [game, setGame] = useState(storage.getGame(id));
   const confirm = useConfirm();
   const engine = new Engine(game);
+  const classes = useStyles();
 
   const toggleAttempt = (i: number, j: number, k: number) => {
     game.result[i][j][k] = !game.result[i][j][k];
@@ -62,6 +82,26 @@ export default function Play() {
         flexShrink={0}
         flexBasis={0}
       >
+        <Box display="flex" flexDirection="column">
+          <RoundHeader roundNumber={0} hidden />
+          {/* <Box flexGrow={1} flexShrink={0} flexBasis={0}>
+            Runda <br />
+            Fot
+          </Box> */}
+          {engine.venue.layout.map((position, positionIdx) => (
+            <Box
+              flexGrow={1}
+              flexShrink={0}
+              flexBasis={0}
+              display="flex"
+              justifyContent="center"
+            >
+              <Box alignSelf="center" className={classes.position}>
+                {positionLabel(position)}
+              </Box>
+            </Box>
+          ))}
+        </Box>
         {game.result.map((round, i) => (
           <React.Fragment>
             <Box

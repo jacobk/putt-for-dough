@@ -18,9 +18,17 @@ export default class Engine {
 
   bonusPosition(roundIdx: number, attemptIdx: number): boolean {
     return (
-      (roundIdx === 0 && attemptIdx === 0) ||
-      (roundIdx === 2 && attemptIdx === 1)
+      this.firstBonusPosition(roundIdx, attemptIdx) ||
+      this.lastBonusPosition(roundIdx, attemptIdx)
     );
+  }
+
+  firstBonusPosition(roundIdx: number, attemptIdx: number): boolean {
+    return roundIdx === 0 && attemptIdx === 0;
+  }
+
+  lastBonusPosition(roundIdx: number, attemptIdx: number): boolean {
+    return roundIdx === 2 && attemptIdx === 1;
   }
 
   scoreAttempt(roundIdx: number, positionIdx: number, attemptIdx: number) {
@@ -49,6 +57,88 @@ export default class Engine {
         return sum + (this.fullRow(positionIdx) ? positionValue : 0);
       }, 0)
     );
+  }
+
+  successPercent(): string {
+    const successCount = this.countBy(
+      (roundIdx, positionIdx, attemptIdx, attempt) => attempt
+    );
+    return ((successCount / (6 * 6)) * 100).toFixed(1);
+  }
+
+  bonusPositionPercent(): { first: string; last: string; both: string } {
+    const firstPositionCount = this.countBy(
+      (roundIdx, positionIdx, attemptIdx, attempt) =>
+        this.firstBonusPosition(roundIdx, attemptIdx) && attempt
+    );
+    const lastPositionCount = this.countBy(
+      (roundIdx, positionIdx, attemptIdx, attempt) =>
+        this.lastBonusPosition(roundIdx, attemptIdx) && attempt
+    );
+    console.log(firstPositionCount, lastPositionCount);
+
+    return {
+      first: ((firstPositionCount / 6) * 100).toFixed(1),
+      last: ((lastPositionCount / 6) * 100).toFixed(1),
+      both: (((firstPositionCount + lastPositionCount) / 12) * 100).toFixed(1),
+    };
+  }
+
+  positionPercent(): string[] {
+    return [...Array<string>(6)].map((_, idx) => {
+      console.log("hej");
+      return (
+        (this.countBy(
+          (roundIdx, positionIdx, attemptIdx, attempt) =>
+            positionIdx === idx && attempt
+        ) /
+          6) *
+        100
+      ).toFixed(1);
+    });
+  }
+
+  roundPercent(): number[] {
+    return this.game.result.map((round, idx) =>
+      Math.round(
+        (this.countBy(
+          (roundIdx, positionIdx, attemptIdx, attempt) =>
+            roundIdx === idx && attempt
+        ) /
+          (6 * 2)) *
+          100
+      )
+    );
+  }
+
+  // successPercent
+  // Bonus rate { first, last}
+  // distance percent {pos 1,2,3,4,5,6}
+
+  countBy(
+    pred: (
+      roundIdx: number,
+      positionId: number,
+      attemptId: number,
+      attempt: boolean
+    ) => boolean
+  ): number {
+    return this.game.result.reduce((sum, round, roundIdx) => {
+      return (
+        sum +
+        round.reduce((roundSum, position, positionIdx) => {
+          return (
+            roundSum +
+            position.reduce((attemptSum, attempt, attemptIdx) => {
+              return (
+                attemptSum +
+                (pred(roundIdx, positionIdx, attemptIdx, attempt) ? 1 : 0)
+              );
+            }, 0)
+          );
+        }, 0)
+      );
+    }, 0);
   }
 
   private bonusLevel(positionIdx: number) {

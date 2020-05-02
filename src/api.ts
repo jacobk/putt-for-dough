@@ -46,6 +46,8 @@ export default class Storage implements API {
   getSettings(): Settings {
     return this.get(this.SETTINGS_KEY, () => ({
       darkMode: false,
+      showFeet: true,
+      showMetric: false,
     }));
   }
 

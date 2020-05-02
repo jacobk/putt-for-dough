@@ -10,6 +10,7 @@ import CardContent from "@material-ui/core/CardContent";
 import PageTitle from "./PageTitle";
 import Storage from "./api";
 import { makeStyles } from "@material-ui/core/styles";
+import { Settings as TSettings } from "./types";
 
 const storage = new Storage();
 
@@ -28,6 +29,10 @@ export default function Settings(props: SettingsProps) {
   const [settings, setSettings] = React.useState(storage.getSettings());
   const classes = useStyles();
 
+  const update = (settings: TSettings) => {
+    setSettings(storage.updateSettings(settings));
+  };
+
   return (
     <React.Fragment>
       <PageTitle title="Ställ in" />
@@ -43,11 +48,41 @@ export default function Settings(props: SettingsProps) {
                     onChange={() => {
                       settings.darkMode = !settings.darkMode;
                       props.toggleDarkMode(settings.darkMode);
-                      setSettings(storage.updateSettings(settings));
+                      update(settings);
                     }}
                   />
                 }
                 label="Dark mode"
+              />
+              <FormControlLabel
+                control={
+                  <Switch
+                    checked={settings.showFeet}
+                    onChange={() => {
+                      settings.showFeet = !settings.showFeet;
+                      if (!settings.showFeet && !settings.showMetric) {
+                        settings.showMetric = true;
+                      }
+                      update(settings);
+                    }}
+                  />
+                }
+                label="Visa fot"
+              />
+              <FormControlLabel
+                control={
+                  <Switch
+                    checked={settings.showMetric}
+                    onChange={() => {
+                      settings.showMetric = !settings.showMetric;
+                      if (!settings.showFeet && !settings.showMetric) {
+                        settings.showFeet = true;
+                      }
+                      update(settings);
+                    }}
+                  />
+                }
+                label="Visa meter"
               />
             </FormGroup>
           </FormControl>

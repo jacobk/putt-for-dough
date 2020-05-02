@@ -52,9 +52,9 @@ const useStyles = makeStyles((theme) => ({
     flexGrow: 1,
     flexShrink: 0,
     flexBasis: 0,
-    borderBottomWidth: 1,
-    border:
-      theme.palette.type === "dark" ? "1px solid black" : "1px solid white",
+    borderWidth: 1,
+    borderStyle: "solid",
+    borderColor: theme.palette.background.default,
     backgroundColor:
       theme.palette.type === "dark"
         ? darkBackgroundColor(props)

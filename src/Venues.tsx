@@ -38,7 +38,47 @@ export const stHansStandard: Venue = {
   longBonus: 10,
 };
 
-export const venues = [bulltoftaStandard, bulltoftaLong, stHansStandard];
+export const experiment1: Venue = {
+  id: "experimental-1",
+  name: "Experiment One",
+  description: "",
+  layout: [3, 4, 6, 7, 9, 10],
+  address: "tbd",
+  location: { lon: 0, lat: 0 },
+  defaultBonus: 5,
+  longBonus: 10,
+};
+
+export const experiment2: Venue = {
+  id: "experimental-1",
+  name: "Experiment One",
+  description: "",
+  layout: [10, 12, 14, 16, 18, 20],
+  address: "tbd",
+  location: { lon: 0, lat: 0 },
+  defaultBonus: 5,
+  longBonus: 10,
+};
+
+export const experiment3: Venue = {
+  id: "experimental-1",
+  name: "Experiment One",
+  description: "",
+  layout: [4, 7, 10, 14, 17, 20],
+  address: "tbd",
+  location: { lon: 0, lat: 0 },
+  defaultBonus: 5,
+  longBonus: 10,
+};
+
+export const venues = [
+  bulltoftaStandard,
+  bulltoftaLong,
+  stHansStandard,
+  experiment1,
+  experiment2,
+  experiment3,
+];
 
 export const findVenue = (venueId: string): Venue => {
   const match = venues.find((venue) => venue.id === venueId);
