@@ -3,7 +3,6 @@ import FormLabel from "@material-ui/core/FormLabel";
 import FormControl from "@material-ui/core/FormControl";
 import FormGroup from "@material-ui/core/FormGroup";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
-import FormHelperText from "@material-ui/core/FormHelperText";
 import Switch from "@material-ui/core/Switch";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
@@ -11,6 +10,11 @@ import PageTitle from "./PageTitle";
 import Storage from "./api";
 import { makeStyles } from "@material-ui/core/styles";
 import { Settings as TSettings } from "./types";
+import { Button } from "@material-ui/core";
+import DeleteIcon from "@material-ui/icons/Delete";
+import CardHeader from "./CardHeader";
+import { useConfirm } from "material-ui-confirm";
+import { useHistory } from "react-router-dom";
 
 const storage = new Storage();
 
@@ -27,7 +31,9 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Settings(props: SettingsProps) {
   const [settings, setSettings] = React.useState(storage.getSettings());
+  const history = useHistory();
   const classes = useStyles();
+  const confirm = useConfirm();
 
   const update = (settings: TSettings) => {
     setSettings(storage.updateSettings(settings));
@@ -86,6 +92,29 @@ export default function Settings(props: SettingsProps) {
               />
             </FormGroup>
           </FormControl>
+        </CardContent>
+      </Card>
+      <CardHeader title="Danger Zone" />
+      <Card className={classes.card}>
+        <CardContent>
+          <Button
+            variant="contained"
+            color="secondary"
+            startIcon={<DeleteIcon />}
+            onClick={() =>
+              confirm({
+                title: "Är du RIKTIGT säker?",
+                description: "All speldata kommer raderas!",
+              })
+                .then(() => {
+                  storage.resetAll();
+                  history.push("/");
+                })
+                .catch(() => {})
+            }
+          >
+            Nollställ all data
+          </Button>
         </CardContent>
       </Card>
     </React.Fragment>

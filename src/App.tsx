@@ -1,22 +1,15 @@
-import React, { useState } from "react";
+import React from "react";
 import "./App.css";
 import Venues from "./Venues";
 import Storage from "./api";
-import {
-  Switch,
-  Route,
-  Redirect,
-  Link,
-  useParams,
-  useHistory,
-} from "react-router-dom";
+import { Switch, Route, Redirect, Link, useHistory } from "react-router-dom";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import Box from "@material-ui/core/Box";
 import { makeStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
-import { Toolbar, Button } from "@material-ui/core";
+import { Toolbar } from "@material-ui/core";
 import SwipeableDrawer from "@material-ui/core/SwipeableDrawer";
 import IconButton from "@material-ui/core/IconButton";
 import MenuIcon from "@material-ui/icons/Menu";
@@ -37,6 +30,7 @@ import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
 import { CssBaseline } from "@material-ui/core";
 import { ConfirmProvider } from "material-ui-confirm";
 import GameDetails from "./GameDetails";
+import VenueDetails from "./VenueDetails";
 
 const storage = new Storage();
 
@@ -116,8 +110,14 @@ function App() {
               >
                 <MenuIcon />
               </IconButton>
-              <img src={spinndisckFkLogo} className={classes.logo} />
-              <Route path={["/start", "/games", "/games", "/settings"]}>
+              <img
+                alt="spinndisk fk"
+                src={spinndisckFkLogo}
+                className={classes.logo}
+              />
+              <Route
+                path={["/start", "/games", "/games", "/settings", "/venues"]}
+              >
                 <Fab
                   className={classes.fab}
                   color="secondary"
@@ -191,6 +191,9 @@ function App() {
             </Route>
             <Route path="/settings">
               <Settings toggleDarkMode={setDarkMode} />
+            </Route>
+            <Route path="/venues/:id">
+              <VenueDetails />
             </Route>
             <Route path="/venues">
               <Venues />

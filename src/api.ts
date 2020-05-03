@@ -74,9 +74,13 @@ export default class Storage implements API {
     return this.updateGame(game);
   }
 
+  resetAll() {
+    localStorage.clear();
+  }
+
   private addGame(game: Game): void {
     const games = this.loadGames();
-    games.push(game);
+    games.unshift(game);
     this.writeGames(games);
   }
 
@@ -100,14 +104,6 @@ export default class Storage implements API {
     }
 
     return producer(key);
-  }
-
-  private decodeGame(raw: any): Game {
-    raw.startTime = Date.parse(raw.startTime);
-    if (raw.endTime) {
-      raw.endTime = Date.parse(raw.endTime);
-    }
-    return raw;
   }
 
   private buildInitResult(): Result {

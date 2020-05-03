@@ -23,7 +23,7 @@ export default (props: Props) => {
         {games.map((game) => {
           const engine = new Engine(game);
           return (
-            <React.Fragment>
+            <React.Fragment key={game.id}>
               <Divider variant="middle" />
               <ListItem
                 button

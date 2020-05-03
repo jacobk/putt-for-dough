@@ -10,19 +10,11 @@ import Score from "./Score";
 import { useConfirm } from "material-ui-confirm";
 import Storage from "./api";
 import { makeStyles } from "@material-ui/core/styles";
-import Chip from "@material-ui/core/Chip";
 import { positionLabel } from "./helpers";
 
 const storage = new Storage();
 
 const useStyles = makeStyles((theme) => ({
-  gridAxisLabel: {
-    // transform: "rotate(45deg)",
-    // position: "relative",
-    // top: theme.spacing(1),
-    // left: theme.spacing(1),
-    // textAlign: "left",
-  },
   position: {
     textAlign: "center",
     paddingLeft: theme.spacing(1),
@@ -95,6 +87,7 @@ export default function Play() {
               flexBasis={0}
               display="flex"
               justifyContent="center"
+              key={`position-${positionIdx}`}
             >
               <Box alignSelf="center" className={classes.position}>
                 {positionLabel(position)}
@@ -103,33 +96,38 @@ export default function Play() {
           ))}
         </Box>
         {game.result.map((round, i) => (
-          <React.Fragment>
-            <Box
-              flexGrow={1}
-              flexShrink={0}
-              flexBasis={0}
-              display="flex"
-              flexDirection="column"
-            >
-              <RoundHeader roundNumber={i + 1} />
-              {round.map((position, j) => (
-                <Box flexGrow={1} flexShrink={0} flexBasis={0} display="flex">
-                  {position.map((attempt, k) => (
-                    <Attempt
-                      round={i}
-                      bonusPosition={engine.bonusPosition(i, k)}
-                      position={j}
-                      rowBonus={engine.fullRow(j)}
-                      score={engine.scoreAttempt(i, j, k)}
-                      success={attempt}
-                      key={`attempt-${i}-${j}-${k}`}
-                      onClick={() => toggleAttempt(i, j, k)}
-                    />
-                  ))}
-                </Box>
-              ))}
-            </Box>
-          </React.Fragment>
+          <Box
+            flexGrow={1}
+            flexShrink={0}
+            flexBasis={0}
+            display="flex"
+            flexDirection="column"
+            key={`round-col-${i}`}
+          >
+            <RoundHeader roundNumber={i + 1} />
+            {round.map((position, j) => (
+              <Box
+                flexGrow={1}
+                flexShrink={0}
+                flexBasis={0}
+                display="flex"
+                key={`attepmt-row-${j}`}
+              >
+                {position.map((attempt, k) => (
+                  <Attempt
+                    round={i}
+                    bonusPosition={engine.bonusPosition(i, k)}
+                    position={j}
+                    rowBonus={engine.fullRow(j)}
+                    score={engine.scoreAttempt(i, j, k)}
+                    success={attempt}
+                    key={`attempt-${i}-${j}-${k}`}
+                    onClick={() => toggleAttempt(i, j, k)}
+                  />
+                ))}
+              </Box>
+            ))}
+          </Box>
         ))}
       </Box>
       <Box>

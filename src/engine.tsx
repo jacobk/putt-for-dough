@@ -75,7 +75,6 @@ export default class Engine {
       (roundIdx, positionIdx, attemptIdx, attempt) =>
         this.lastBonusPosition(roundIdx, attemptIdx) && attempt
     );
-    console.log(firstPositionCount, lastPositionCount);
 
     return {
       first: ((firstPositionCount / 6) * 100).toFixed(1),
@@ -86,7 +85,6 @@ export default class Engine {
 
   positionPercent(): string[] {
     return [...Array<string>(6)].map((_, idx) => {
-      console.log("hej");
       return (
         (this.countBy(
           (roundIdx, positionIdx, attemptIdx, attempt) =>

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Storage from "./api";
 import clsx from "clsx";
-import { useParams } from "react-router-dom";
+import { useParams, useHistory } from "react-router-dom";
 import PageTitle from "./PageTitle";
 import RadioButtonUncheckedIcon from "@material-ui/icons/RadioButtonUnchecked";
 import CheckCircleOutlineIcon from "@material-ui/icons/CheckCircleOutline";
@@ -9,12 +9,6 @@ import Engine from "./engine";
 import Card from "@material-ui/core/Card";
 import Divider from "@material-ui/core/Divider";
 import { makeStyles } from "@material-ui/core/styles";
-import Table from "@material-ui/core/Table";
-import TableBody from "@material-ui/core/TableBody";
-import TableCell from "@material-ui/core/TableCell";
-import TableContainer from "@material-ui/core/TableContainer";
-import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
 import Typography from "@material-ui/core/Typography";
 import Chip from "@material-ui/core/Chip";
 import Box from "@material-ui/core/Box";
@@ -37,16 +31,15 @@ import {
 import blue from "@material-ui/core/colors/blue";
 import green from "@material-ui/core/colors/green";
 import red from "@material-ui/core/colors/red";
-import yellow from "@material-ui/core/colors/yellow";
-import orange from "@material-ui/core/colors/orange";
-import purple from "@material-ui/core/colors/purple";
-import pink from "@material-ui/core/colors/pink";
 import { useTheme } from "@material-ui/core/styles";
 import { Link } from "react-router-dom";
 import CardContent from "@material-ui/core/CardContent";
-import { Color, Theme } from "@material-ui/core";
+import { Color, Button } from "@material-ui/core";
 import GolfCourseIcon from "@material-ui/icons/GolfCourse";
 import ScrollToTop from "./ScrollToTop";
+import CardHeader from "./CardHeader";
+import DeleteIcon from "@material-ui/icons/Delete";
+import { useConfirm } from "material-ui-confirm";
 
 interface GameDetailsProps {}
 
@@ -94,17 +87,12 @@ export default function GameDetails(props: GameDetailsProps) {
   const { id } = useParams();
   const theme = useTheme();
   const [game] = useState(storage.getGame(id));
+  const confirm = useConfirm();
+  const history = useHistory();
   const engine = new Engine(game);
   const classes = useStyles();
 
-  //   [
-  //       [[a, a], [b, b], [c, c], [d, d], [e, e], [f, f]],
-  //       [[a, a], [b, b], [c, c], [d, d], [e, e], [f, f]],
-  //       [[a, b], [b, b], [c, c], [d, d], [e, e], [f, f]],
-  //   ]
-
   const matrix: boolean[][] = [];
-
   for (let i = 0; i < 3; i++) {
     for (let j = 0; j < 6; j++) {
       if (!matrix[j]) {
@@ -113,17 +101,6 @@ export default function GameDetails(props: GameDetailsProps) {
       matrix[j] = [...matrix[j], ...game.result[i][j]];
     }
   }
-
-  const data = [
-    {
-      name: "18-24",
-      value: 50,
-
-      fill: "#8884d8",
-    },
-  ];
-
-  const colorMap = [blue, green, yellow, orange, purple, pink];
   const positionPercentages: {
     name: string;
     value: number;
@@ -133,9 +110,7 @@ export default function GameDetails(props: GameDetailsProps) {
     value: Number(stat),
     fill: theme.palette.grey[(idx * 100 + 400) as keyof Color] as string,
   }));
-
   const bonusPercent = engine.bonusPositionPercent();
-
   const radarData = engine.venue.layout.map((position, idx) => ({
     position: positionLabel(position),
     a: game.result[0][idx].filter((attempt) => attempt).length,
@@ -143,9 +118,7 @@ export default function GameDetails(props: GameDetailsProps) {
     c: game.result[2][idx].filter((attempt) => attempt).length,
     fullMark: 2,
   }));
-
   const roundPercents = engine.roundPercent();
-  console.log(roundPercents);
 
   return (
     <Box flexGrow={1}>
@@ -179,10 +152,12 @@ export default function GameDetails(props: GameDetailsProps) {
               {row.map((col, j) => {
                 return col ? (
                   <CheckCircleOutlineIcon
+                    key={`attempt-${row}-${j}`}
                     className={clsx(classes.gridIcon, classes.gridIconSuccess)}
                   />
                 ) : (
                   <RadioButtonUncheckedIcon
+                    key={`attempt-${row}-${j}`}
                     className={clsx(classes.gridIcon, classes.gridIconFail)}
                   />
                 );
@@ -201,9 +176,7 @@ export default function GameDetails(props: GameDetailsProps) {
           <PercentPanel value={Number(bonusPercent.last)} title="Sista" />
         </Box>
       </Card>
-      <Typography variant="button" className={classes.cardHeader}>
-        Träffar per distans
-      </Typography>
+      <CardHeader title="Träffar per distans" />
       <Card classes={{ root: classes.scoreCard }}>
         <ResponsiveContainer width="100%" height={180}>
           <RadialBarChart
@@ -237,20 +210,25 @@ export default function GameDetails(props: GameDetailsProps) {
           </RadialBarChart>
         </ResponsiveContainer>
       </Card>
-      <Typography variant="button" className={classes.cardHeader}>
-        Träffar per omgång
-      </Typography>
+      <CardHeader title="Träffar per omgång" />
       <Card classes={{ root: classes.scoreCard }}>
         <Box display="flex">
           {roundPercents.map((value, idx) => (
-            <PercentPanel value={value} title={String(idx + 1)} />
+            <PercentPanel
+              value={value}
+              title={String(idx + 1)}
+              key={`hits-per-round-${idx}`}
+            />
           ))}
         </Box>
         <Divider variant="middle" className={classes.divider} />
         <ResponsiveContainer width="100%" height={200}>
           <RadarChart data={radarData}>
             <PolarGrid />
-            <PolarAngleAxis dataKey="position" />
+            <PolarAngleAxis
+              dataKey="position"
+              tick={{ fill: theme.palette.text.primary }}
+            />
             <PolarRadiusAxis angle={30} domain={[0, 2]} />
             <Radar
               name="1"
@@ -278,6 +256,30 @@ export default function GameDetails(props: GameDetailsProps) {
           </RadarChart>
         </ResponsiveContainer>
       </Card>
+      <CardHeader title="Farozonen" />
+      <Card classes={{ root: classes.scoreCard }}>
+        <CardContent>
+          <Button
+            variant="contained"
+            color="secondary"
+            startIcon={<DeleteIcon />}
+            onClick={() =>
+              confirm({
+                title: "Är du säker?",
+                description: "Spelet kommer slängas för all evighet!",
+              })
+                .then(() => {
+                  storage.deleteGame(game.id);
+                  history.push("/");
+                })
+                .catch(() => {})
+            }
+          >
+            Släng
+          </Button>
+        </CardContent>
+      </Card>
+
       <Box style={{ height: 100 }}></Box>
     </Box>
   );
@@ -315,7 +317,11 @@ const PercentPanel = ({ title, value }: { title: string; value: number }) => {
             outerRadius="80%"
             stroke="none"
           >
-            <Label value={`${value}%`} position="center" />
+            <Label
+              value={`${value}%`}
+              position="center"
+              fill={theme.palette.text.primary}
+            />
           </Pie>
         </PieChart>
       </ResponsiveContainer>

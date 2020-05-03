@@ -12,3 +12,6 @@ export const positionLabel = (positionValue: number) => {
   }
   return result.join("/");
 };
+
+export const feetToMeterLabel = (value: number): string =>
+  `${(value / 3.281).toFixed(1)}`;
