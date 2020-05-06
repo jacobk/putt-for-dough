@@ -1,4 +1,4 @@
-import { API, Game, Settings, Result, Venue } from "./types";
+import { API, Game, Settings, Result, Venue, Layout } from "./types";
 
 export default class Storage implements API {
   STORAGE_PREFIX = "dough_";
@@ -76,6 +76,32 @@ export default class Storage implements API {
 
   resetAll() {
     localStorage.clear();
+  }
+
+  updateSpecialLayout(layoutId: string, layout: Layout): Layout {
+    const key = `layout_${layoutId}`;
+    this.set(key, layout);
+    return this.get(key, (k: string) => layout);
+  }
+
+  specialLayout(layoutId: string): Layout {
+    const key = `layout_${layoutId}`;
+    return this.get(key, (k: string) => [10, 15, 20, 23, 25, 27]);
+  }
+
+  getSpecialBonus(bonusId: string, defaultValue: number): number {
+    const key = `bonus_${bonusId}`;
+    return this.get(key, () => defaultValue);
+  }
+
+  setSpecialBonus(
+    bonusId: string,
+    bonus: number,
+    defaultValue: number
+  ): number {
+    const key = `bonus_${bonusId}`;
+    this.set(key, bonus);
+    return this.get(key, () => defaultValue);
   }
 
   private addGame(game: Game): void {

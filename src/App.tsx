@@ -31,6 +31,8 @@ import { CssBaseline } from "@material-ui/core";
 import { ConfirmProvider } from "material-ui-confirm";
 import GameDetails from "./GameDetails";
 import VenueDetails from "./VenueDetails";
+import TimelineIcon from "@material-ui/icons/Timeline";
+import Stats from "./Stats";
 
 const storage = new Storage();
 
@@ -116,7 +118,14 @@ function App() {
                 className={classes.logo}
               />
               <Route
-                path={["/start", "/games", "/games", "/settings", "/venues"]}
+                path={[
+                  "/start",
+                  "/games",
+                  "/games",
+                  "/settings",
+                  "/venues",
+                  "/stats",
+                ]}
               >
                 <Fab
                   className={classes.fab}
@@ -150,6 +159,12 @@ function App() {
               </ListItemIcon>
               <ListItemText primary="Resultat" />
             </ListItem>
+            <ListItem button component={Link} to="/stats" onClick={closeDrawer}>
+              <ListItemIcon>
+                <TimelineIcon />
+              </ListItemIcon>
+              <ListItemText primary="Statistik" />
+            </ListItem>
             <ListItem
               button
               component={Link}
@@ -161,6 +176,7 @@ function App() {
               </ListItemIcon>
               <ListItemText primary="Banor" />
             </ListItem>
+            <Divider />
             <ListItem
               button
               component={Link}
@@ -188,6 +204,9 @@ function App() {
             </Route>
             <Route path="/games">
               <Games />
+            </Route>
+            <Route path="/stats">
+              <Stats />
             </Route>
             <Route path="/settings">
               <Settings toggleDarkMode={setDarkMode} />

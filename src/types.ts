@@ -14,6 +14,7 @@ export interface Venue {
   address: string;
   defaultBonus: number;
   longBonus: number;
+  special: boolean;
 }
 
 export type RoundResult = [

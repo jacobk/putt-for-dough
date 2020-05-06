@@ -57,10 +57,11 @@ export default (props: Props) => {
           </CardContent>
         </CardActionArea>
         <CardActions>
-          <Button size="small" color="primary">
-            Börja
-          </Button>
-          <Button size="small" color="primary">
+          <Button
+            size="small"
+            color="primary"
+            onClick={() => window.location.assign("https://www.spinndiscfk.se")}
+          >
             Lär dig mer
           </Button>
         </CardActions>

@@ -2,7 +2,7 @@ import { Game, Venue } from "./types";
 import { findVenue } from "./Venues";
 
 export default class Engine {
-  private game: Game;
+  game: Game;
   venue: Venue;
 
   constructor(game: Game) {
@@ -59,14 +59,17 @@ export default class Engine {
     );
   }
 
-  successPercent(): string {
-    const successCount = this.countBy(
+  succcessCount(): number {
+    return this.countBy(
       (roundIdx, positionIdx, attemptIdx, attempt) => attempt
     );
-    return ((successCount / (6 * 6)) * 100).toFixed(1);
   }
 
-  bonusPositionPercent(): { first: string; last: string; both: string } {
+  successPercent(): string {
+    return ((this.succcessCount() / (6 * 6)) * 100).toFixed(1);
+  }
+
+  bonusPositionCount() {
     const firstPositionCount = this.countBy(
       (roundIdx, positionIdx, attemptIdx, attempt) =>
         this.firstBonusPosition(roundIdx, attemptIdx) && attempt
@@ -76,6 +79,12 @@ export default class Engine {
         this.lastBonusPosition(roundIdx, attemptIdx) && attempt
     );
 
+    return { firstPositionCount, lastPositionCount };
+  }
+
+  bonusPositionPercent(): { first: string; last: string; both: string } {
+    const { firstPositionCount, lastPositionCount } = this.bonusPositionCount();
+
     return {
       first: ((firstPositionCount / 6) * 100).toFixed(1),
       last: ((lastPositionCount / 6) * 100).toFixed(1),
@@ -83,17 +92,17 @@ export default class Engine {
     };
   }
 
+  positionCount(): number[] {
+    return [...Array<string>(6)].map((_, idx) =>
+      this.countBy(
+        (roundIdx, positionIdx, attemptIdx, attempt) =>
+          positionIdx === idx && attempt
+      )
+    );
+  }
+
   positionPercent(): string[] {
-    return [...Array<string>(6)].map((_, idx) => {
-      return (
-        (this.countBy(
-          (roundIdx, positionIdx, attemptIdx, attempt) =>
-            positionIdx === idx && attempt
-        ) /
-          6) *
-        100
-      ).toFixed(1);
-    });
+    return this.positionCount().map((count) => ((count / 6) * 100).toFixed(1));
   }
 
   roundPercent(): number[] {
@@ -109,9 +118,9 @@ export default class Engine {
     );
   }
 
-  // successPercent
-  // Bonus rate { first, last}
-  // distance percent {pos 1,2,3,4,5,6}
+  fullRound(): boolean[] {
+    return this.roundPercent().map((pct) => pct >= 100);
+  }
 
   countBy(
     pred: (

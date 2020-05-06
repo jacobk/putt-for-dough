@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { RoundResult } from "./types";
 import "./App.css";
 import { useParams, useHistory } from "react-router-dom";
 import Box from "@material-ui/core/Box";
@@ -30,6 +31,7 @@ export default function Play() {
   const confirm = useConfirm();
   const engine = new Engine(game);
   const classes = useStyles();
+  const fullRounds = engine.fullRound();
 
   const toggleAttempt = (i: number, j: number, k: number) => {
     game.result[i][j][k] = !game.result[i][j][k];
@@ -63,6 +65,16 @@ export default function Play() {
         history.push(`/games/${game.id}`);
       })
       .catch(() => {});
+  };
+
+  const setFullRound = (roundIx: number) => () => {
+    if (!fullRounds[roundIx]) {
+      game.result[roundIx] = game.result[roundIx].map((position) => [
+        true,
+        true,
+      ]) as RoundResult;
+      setGame(storage.updateGame(game));
+    }
   };
 
   return (
@@ -104,7 +116,11 @@ export default function Play() {
             flexDirection="column"
             key={`round-col-${i}`}
           >
-            <RoundHeader roundNumber={i + 1} />
+            <RoundHeader
+              roundNumber={i + 1}
+              checked={fullRounds[i]}
+              onClick={setFullRound(i)}
+            />
             {round.map((position, j) => (
               <Box
                 flexGrow={1}
