@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "./App.css";
 import Venues from "./Venues";
 import Storage from "./api";
@@ -33,6 +33,7 @@ import GameDetails from "./GameDetails";
 import VenueDetails from "./VenueDetails";
 import TimelineIcon from "@material-ui/icons/Timeline";
 import Stats from "./Stats";
+import ReactGA from "react-ga";
 
 const storage = new Storage();
 
@@ -69,6 +70,15 @@ function App() {
     storage.getSettings().darkMode
   );
   const [venueSelectorOpen, setVenueSelectorOpen] = React.useState(false);
+  useEffect(() => {
+    ReactGA.initialize("UA-166285768-1");
+  });
+
+  useEffect(() => {
+    return history.listen((location) => {
+      ReactGA.pageview(location.pathname);
+    });
+  }, [history]);
 
   const closeDrawer = () => {
     setDrawerOpen(false);

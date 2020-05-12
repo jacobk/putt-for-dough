@@ -60,7 +60,11 @@ export default (props: Props) => {
           <Button
             size="small"
             color="primary"
-            onClick={() => window.location.assign("https://www.spinndiscfk.se")}
+            onClick={() =>
+              window.location.assign(
+                "https://www.spinndiscfk.se/index.php/klubben/putt-traning"
+              )
+            }
           >
             Lär dig mer
           </Button>

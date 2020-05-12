@@ -27,7 +27,6 @@ import {
   YAxis,
   Legend,
   Line,
-  Tooltip,
   ReferenceLine,
   RadialBarChart,
   PolarAngleAxis,
@@ -197,7 +196,6 @@ export default (props: Props) => {
               tickLine={false}
               stroke={theme.palette.text.hint}
             />
-            <Tooltip />
             <ReferenceLine y={scoreAvg} stroke="red" strokeDasharray="3 3" />
             <Line
               isAnimationActive={false}
@@ -229,7 +227,6 @@ export default (props: Props) => {
               stroke={theme.palette.text.hint}
             />
 
-            <Tooltip />
             <Legend
               iconType="plainline"
               formatter={(value, entry, index) => {
