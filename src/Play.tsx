@@ -32,9 +32,21 @@ export default function Play() {
   const engine = new Engine(game);
   const classes = useStyles();
   const fullRounds = engine.fullRound();
-
   const toggleAttempt = (i: number, j: number, k: number) => {
     game.result[i][j][k] = !game.result[i][j][k];
+    setGame(storage.updateGame(game));
+  };
+
+  const toggleSelectPrevious = (
+    roundIdx: number,
+    positionIdx: number,
+    attemptIdx: number
+  ) => {
+    for (let i = 0; i <= positionIdx; i++) {
+      for (let j = 0; j <= (i < positionIdx ? 1 : attemptIdx); j++) {
+        game.result[roundIdx][i][j] = true;
+      }
+    }
     setGame(storage.updateGame(game));
   };
 
@@ -139,6 +151,7 @@ export default function Play() {
                     success={attempt}
                     key={`attempt-${i}-${j}-${k}`}
                     onClick={() => toggleAttempt(i, j, k)}
+                    onSwipe={() => toggleSelectPrevious(i, j, k)}
                   />
                 ))}
               </Box>

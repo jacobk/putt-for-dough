@@ -326,7 +326,9 @@ export default (props: Props) => {
 };
 
 const selectGames = (period: Periods, venueId: string): Engine[] => {
-  let games = storage.listGames().filter((game) => game.venueId === venueId);
+  let games = storage
+    .listGames()
+    .filter((game) => game.venueId === venueId && game.endTime !== undefined);
   if (period === "year") {
     games = games.filter(
       (game) =>

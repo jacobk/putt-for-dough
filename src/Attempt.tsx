@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { ButtonBase } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import grey from "@material-ui/core/colors/grey";
@@ -6,6 +6,9 @@ import yellow from "@material-ui/core/colors/yellow";
 import lightGreen from "@material-ui/core/colors/lightGreen";
 import green from "@material-ui/core/colors/green";
 import blue from "@material-ui/core/colors/blue";
+import { Swipeable, EventData } from "react-swipeable";
+import CheckCircleIcon from "@material-ui/icons/CheckCircle";
+import SwapHorizontalCircleIcon from "@material-ui/icons/SwapHorizontalCircle";
 
 type Props = {
   round: number;
@@ -15,6 +18,7 @@ type Props = {
   rowBonus: boolean;
   bonusPosition: boolean;
   onClick: () => void;
+  onSwipe: () => void;
 };
 
 const roundShades = [grey[100], grey[200], grey[300]];
@@ -47,11 +51,15 @@ const darkBackgroundColor = (props: Props): string => {
 };
 
 const useStyles = makeStyles((theme) => ({
-  root: (props: Props) => ({
-    ...theme.typography.button,
+  swipeContainer: {
     flexGrow: 1,
     flexShrink: 0,
     flexBasis: 0,
+  },
+  root: (props: Props) => ({
+    ...theme.typography.button,
+    width: "100%",
+    height: "100%",
     borderWidth: 1,
     borderStyle: "solid",
     borderColor: theme.palette.background.default,
@@ -63,11 +71,43 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default (props: Props) => {
-  const { success, score, onClick } = props;
+  const { success, score, onClick, onSwipe } = props;
   const classes = useStyles(props);
+  const [swiping, setSwiping] = useState<{ done: boolean } | null>(null);
   return (
-    <ButtonBase classes={{ root: classes.root }} onClick={onClick}>
-      {success ? score : ""}
-    </ButtonBase>
+    <Swipeable
+      onSwiped={(event: EventData) => {
+        if (swiping && swiping.done) {
+          onSwipe();
+        }
+        setSwiping(null);
+      }}
+      onSwiping={(event: EventData) => {
+        if (event.first) {
+          setSwiping({ done: false });
+        }
+        if (Math.abs(event.deltaX) > 100) {
+          setSwiping({ done: true });
+        } else {
+          setSwiping({ done: false });
+        }
+      }}
+      preventDefaultTouchmoveEvent={true}
+      className={classes.swipeContainer}
+    >
+      <ButtonBase classes={{ root: classes.root }} onClick={onClick}>
+        {success ? (
+          score
+        ) : swiping ? (
+          swiping.done ? (
+            <CheckCircleIcon style={{ color: green["A700"] }} />
+          ) : (
+            <SwapHorizontalCircleIcon />
+          )
+        ) : (
+          ""
+        )}
+      </ButtonBase>
+    </Swipeable>
   );
 };
