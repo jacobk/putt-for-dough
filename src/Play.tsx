@@ -42,8 +42,25 @@ export default function Play() {
     positionIdx: number,
     attemptIdx: number
   ) => {
+    let lastSuccess = [0, 0];
     for (let i = 0; i <= positionIdx; i++) {
-      for (let j = 0; j <= (i < positionIdx ? 1 : attemptIdx); j++) {
+      for (let j = 0; j <= 1; j++) {
+        if (game.result[roundIdx][i][j]) {
+          lastSuccess = [i, j];
+        }
+      }
+    }
+    // Wrap around if last success is in right column
+    if (lastSuccess[1] === 1) {
+      lastSuccess[0]++;
+      lastSuccess[1] = 0;
+    }
+    for (let i = lastSuccess[0]; i <= positionIdx; i++) {
+      for (
+        let j = lastSuccess[1];
+        j <= (i < positionIdx ? 1 : attemptIdx);
+        j++
+      ) {
         game.result[roundIdx][i][j] = true;
       }
     }
