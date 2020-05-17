@@ -1,12 +1,10 @@
 import React, { useState } from "react";
 import "./App.css";
-import { useParams, useHistory } from "react-router-dom";
 import Box from "@material-ui/core/Box";
 import { Toolbar, Button } from "@material-ui/core";
 import Attempt from "./Attempt";
 import Score from "./Score";
 import { useConfirm } from "material-ui-confirm";
-import Storage from "./api";
 import { makeStyles } from "@material-ui/core/styles";
 import { positionLabel } from "./helpers";
 
