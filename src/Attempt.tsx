@@ -19,13 +19,14 @@ type Props = {
   bonusPosition: boolean;
   onClick: () => void;
   onSwipe: () => void;
+  staticBackground?: boolean;
 };
 
 const roundShades = [grey[100], grey[200], grey[300]];
 const darkEoundShades = [grey[400], grey[600], grey[800]];
 
 const backgroundColor = (props: Props): string => {
-  const { round, success, rowBonus, bonusPosition } = props;
+  const { round, success, rowBonus, bonusPosition, staticBackground } = props;
   if (rowBonus) {
     return yellow[500];
   } else if (bonusPosition && success) {
@@ -33,12 +34,12 @@ const backgroundColor = (props: Props): string => {
   } else if (success) {
     return lightGreen["A200"];
   } else {
-    return roundShades[round];
+    return staticBackground ? grey[100] : roundShades[round];
   }
 };
 
 const darkBackgroundColor = (props: Props): string => {
-  const { round, success, rowBonus, bonusPosition } = props;
+  const { round, success, rowBonus, bonusPosition, staticBackground } = props;
   if (rowBonus) {
     return blue[800];
   } else if (bonusPosition && success) {
@@ -46,7 +47,7 @@ const darkBackgroundColor = (props: Props): string => {
   } else if (success) {
     return green["600"];
   } else {
-    return darkEoundShades[round];
+    return staticBackground ? grey[100] : darkEoundShades[round];
   }
 };
 

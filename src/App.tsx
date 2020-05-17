@@ -33,6 +33,7 @@ import GameDetails from "./GameDetails";
 import VenueDetails from "./VenueDetails";
 import TimelineIcon from "@material-ui/icons/Timeline";
 import Stats from "./Stats";
+import PlayVirtual from "./PlayVirtual";
 import ReactGA from "react-ga";
 
 const storage = new Storage();
@@ -208,6 +209,9 @@ function App() {
             </Route>
             <Route path="/play/:id">
               <Play />
+            </Route>
+            <Route path="/play-virtual">
+              <PlayVirtual />
             </Route>
             <Route path="/games/:id">
               <GameDetails />

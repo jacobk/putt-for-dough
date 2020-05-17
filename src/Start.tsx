@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import PageTitle from "./PageTitle";
 import Storage from "./api";
-import { useHistory } from "react-router-dom";
+import { useHistory, Link } from "react-router-dom";
 import Card from "@material-ui/core/Card";
 import CardActionArea from "@material-ui/core/CardActionArea";
 import CardActions from "@material-ui/core/CardActions";
@@ -11,6 +11,7 @@ import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import putter from "./sun-putt.jpg";
 import { makeStyles } from "@material-ui/core/styles";
+import { Link as MuILink } from "@material-ui/core";
 
 type Props = {};
 
@@ -18,6 +19,7 @@ const useStyles = makeStyles((theme) => ({
   card: {
     marginLeft: theme.spacing(1),
     marginRight: theme.spacing(1),
+    marginBottom: theme.spacing(1),
   },
 }));
 
@@ -67,6 +69,28 @@ export default (props: Props) => {
             }
           >
             Lär dig mer
+          </Button>
+        </CardActions>
+      </Card>
+      <Card className={classes.card}>
+        <CardActionArea>
+          <CardContent>
+            <Typography variant="body2" color="textSecondary" component="p">
+              Hjälpmedel för DGPT virtual putting!
+            </Typography>
+            <MuILink href="https://www.dgpt.com/news/introducing-the-dgpt-virtual-putting-invitational/">
+              Mer info...
+            </MuILink>
+          </CardContent>
+        </CardActionArea>
+        <CardActions>
+          <Button
+            size="small"
+            color="primary"
+            component={Link}
+            to={`play-virtual`}
+          >
+            Spela
           </Button>
         </CardActions>
       </Card>
