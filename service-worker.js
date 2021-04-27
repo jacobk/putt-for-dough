@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 importScripts(
-  "/putt-for-dough/precache-manifest.0c5b4492804319e2da090e050115a1e1.js"
+  "/putt-for-dough/precache-manifest.f3b8ef15e178bfb77b7ffab37957efad.js"
 );
 
 self.addEventListener('message', (event) => {

@@ -1,27 +1,27 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "e859612737ebb2c632adce41e24cf942",
+    "revision": "1cfa4d1984715f27500c4b052f1541ef",
     "url": "/putt-for-dough/index.html"
   },
   {
-    "revision": "534189cec505d3935f1e",
+    "revision": "78e2fea8014bdacac649",
     "url": "/putt-for-dough/static/css/2.fca52a4e.chunk.css"
   },
   {
-    "revision": "c608d9be87c08389d8e7",
+    "revision": "006e08829367c4b24125",
     "url": "/putt-for-dough/static/css/main.f4bc1fdf.chunk.css"
   },
   {
-    "revision": "534189cec505d3935f1e",
-    "url": "/putt-for-dough/static/js/2.7346a5f8.chunk.js"
+    "revision": "78e2fea8014bdacac649",
+    "url": "/putt-for-dough/static/js/2.38a9f414.chunk.js"
   },
   {
     "revision": "b815bed3bedb5a8af7470bb094451139",
-    "url": "/putt-for-dough/static/js/2.7346a5f8.chunk.js.LICENSE.txt"
+    "url": "/putt-for-dough/static/js/2.38a9f414.chunk.js.LICENSE.txt"
   },
   {
-    "revision": "c608d9be87c08389d8e7",
-    "url": "/putt-for-dough/static/js/main.dc96703b.chunk.js"
+    "revision": "006e08829367c4b24125",
+    "url": "/putt-for-dough/static/js/main.0879d574.chunk.js"
   },
   {
     "revision": "6dc5f2ab38178d116fa4",
